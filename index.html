@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Maquette Boutique Mode</title>
+
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500&family=Jost:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout : vitrine en grille (2 colonnes au téléphone, 4 sur ordinateur), panier en tiroir latéral,
+   espace propriétaire en cartes empilées pensées pour le téléphone. Bandeau de démo au-dessus de tout. */
+:root{
+  --bg:#FAF6F7; --surface:#FFFFFF; --sunk:#F2EAED; --fg:#22161F; --muted:#6E5C68; --line:#E5D8DE;
+  --accent:#8E2453; --accent-ink:#FFFFFF; --accent-soft:#F6E3EB;
+  --ok:#1E7A62; --ok-soft:#E1F2EC; --warn:#9A5806; --warn-soft:#FBEFD9; --bad:#6E5C68; --bad-soft:#ECE4E8;
+  --demo:#22161F; --demo-fg:#F6E3EB; --shade:rgba(34,22,31,.45);
+  --f-display:'Bodoni Moda', Didot, 'Bodoni 72', Georgia, serif;
+  --f-body:'Jost', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --f-mono:'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17111A; --surface:#211824; --sunk:#2A202E; --fg:#F3E9EE; --muted:#B5A2AE; --line:#3A2D3E;
+  --accent:#E07AA4; --accent-ink:#1A0F15; --accent-soft:#3A2030;
+  --ok:#5CC9A6; --ok-soft:#173329; --warn:#E6A54B; --warn-soft:#3A2A12; --bad:#B5A2AE; --bad-soft:#2E2532;
+  --demo:#0E0A10; --demo-fg:#F3E9EE; --shade:rgba(0,0,0,.6); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#17111A; --surface:#211824; --sunk:#2A202E; --fg:#F3E9EE; --muted:#B5A2AE; --line:#3A2D3E;
+  --accent:#E07AA4; --accent-ink:#1A0F15; --accent-soft:#3A2030;
+  --ok:#5CC9A6; --ok-soft:#173329; --warn:#E6A54B; --warn-soft:#3A2A12; --bad:#B5A2AE; --bad-soft:#2E2532;
+  --demo:#0E0A10; --demo-fg:#F3E9EE; --shade:rgba(0,0,0,.6); color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button,a,input,select,label{touch-action:manipulation}
+input,select,textarea{font-size:16px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:16px;padding-right:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--f-display);font-weight:500;line-height:1.15;text-wrap:balance;margin:0}
+
+/* Bandeau démo */
+.demo{background:var(--demo);color:var(--demo-fg);font-size:13px}
+.demo .wrap{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+.seg{display:inline-flex;border:1px solid rgba(246,227,235,.4);border-radius:999px;padding:2px}
+.seg button{background:none;border:0;color:var(--demo-fg);padding:4px 12px;border-radius:999px;font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--demo-fg);color:var(--demo)}
+.admin-dot{display:inline-block;min-width:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:var(--accent);color:var(--accent-ink);font-size:11px;line-height:18px;text-align:center}
+
+/* En-tête boutique */
+header.shop{border-bottom:1px solid var(--line);background:var(--surface)}
+header.shop .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+.brand{background:none;border:0;padding:0;text-align:left}
+.brand b{display:block;font-family:var(--f-display);font-size:26px;font-weight:700;letter-spacing:.02em;font-style:italic}
+.brand small{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.cartbtn{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px}
+.cartbtn .n{background:var(--accent);color:var(--accent-ink);border-radius:999px;font-size:12px;min-width:20px;padding:0 6px;text-align:center}
+
+main{padding-top:24px;padding-bottom:64px}
+.btn{border:0;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:12px 20px;font-weight:600;letter-spacing:.01em}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btn.small{padding:7px 14px;font-size:14px}
+.link{background:none;border:0;padding:0;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* Arrivage */
+.arrival{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end;padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.arrival h1{font-size:clamp(30px,6vw,52px)}
+.arrival h1 em{color:var(--accent)}
+.arrival p{margin:6px 0 0;color:var(--muted);max-width:52ch}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:20px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tools .sp{flex:1}
+.tools label{font-size:14px;display:flex;gap:6px;align-items:center}
+select,input[type=text],input[type=tel],input[type=email],input[type=number],textarea{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%}
+.tools select{width:auto}
+
+/* Grille articles */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:20px 16px}
+@media (min-width:760px){.grid{grid-template-columns:repeat(4,1fr)}}
+.card{background:none;border:0;padding:0;text-align:left;display:flex;flex-direction:column;gap:8px;position:relative}
+.card .nm{font-size:15px;line-height:1.3}
+.card .pr{font-family:var(--f-mono);font-size:14px}
+.card.out .ph{filter:grayscale(.8);opacity:.6}
+.ph{position:relative;height:0;padding-top:125%;max-width:100%;border-radius:var(--r);background:var(--c1);background:linear-gradient(160deg,var(--c1),var(--c2));color:rgba(255,255,255,.85);overflow:hidden}
+.ph svg{position:absolute;left:27%;top:50%;width:46%;height:auto;-webkit-transform:translateY(-50%);transform:translateY(-50%)}
+.ph img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+.card .badge{position:absolute;top:8px;left:8px}
+.badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.b-unique{background:var(--accent);color:var(--accent-ink)}
+.b-few{background:var(--warn-soft);color:var(--warn)}
+.b-ok{background:var(--ok-soft);color:var(--ok)}
+.b-sold{background:var(--bad-soft);color:var(--bad);text-decoration:line-through}
+.b-res{background:var(--warn-soft);color:var(--warn)}
+.empty{padding:40px 0;color:var(--muted);text-align:center}
+
+/* Fiche article */
+.pd{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px}
+@media (max-width:700px){.pd{grid-template-columns:1fr;gap:18px}}
+.pd h1{font-size:clamp(28px,4.5vw,40px);margin:10px 0 6px}
+.pd .price{font-family:var(--f-mono);font-size:20px}
+.pd .desc{color:var(--muted);max-width:60ch}
+.sizes{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.size{min-width:52px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;align-items:center;line-height:1.2}
+.size small{font-size:11px;color:var(--muted)}
+.size[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.size:disabled{text-decoration:line-through;opacity:.45;cursor:not-allowed}
+.stack{display:flex;flex-direction:column;gap:14px}
+.note{font-size:14px;color:var(--muted)}
+.demo-note{border:1px dashed var(--line);border-radius:8px;padding:10px 12px;font-size:14px;color:var(--muted)}
+
+/* Panier */
+.cartview header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.lines{display:flex;flex-direction:column;gap:14px}
+.line{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center}
+.line .ph{padding-top:100%;border-radius:8px}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:var(--surface)}
+.tot{border-top:1px solid var(--line);padding-top:12px;margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.row{display:flex;justify-content:space-between;gap:12px}
+.warnbox{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:10px 12px;font-size:14px}
+
+/* Commande */
+.co{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:32px;align-items:start}
+@media (max-width:760px){.co{grid-template-columns:1fr}}
+.co h1{font-size:34px;margin-bottom:6px}
+form .f{display:flex;flex-direction:column;gap:4px}
+form label{font-size:14px;font-weight:500}
+form .hint{font-size:12px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.two{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px;background:var(--sunk);border-radius:8px;padding:12px}
+.check input{margin-top:4px;accent-color:var(--accent)}
+.err{background:var(--bad-soft);color:var(--fg);border-left:3px solid var(--accent);padding:10px 12px;border-radius:6px;font-size:14px}
+
+/* Paiement */
+.pay{max-width:520px;margin:0 auto}
+.timer{font-family:var(--f-mono);font-size:44px;letter-spacing:.04em;text-align:center}
+.timer.low{color:var(--accent)}
+.methods{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.method{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:12px;text-align:left}
+.method[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.sim{background:var(--sunk);border-radius:8px;padding:12px;font-size:13px;color:var(--muted)}
+
+/* Admin */
+.tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line);margin-bottom:20px}
+@media (max-width:600px){.tabs button{flex:1 1 45%;text-align:center}}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 12px;white-space:nowrap;color:var(--muted)}
+.tabs button[aria-pressed="true"]{color:var(--fg);border-bottom-color:var(--accent);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:24px}
+@media (max-width:720px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.tile .v{font-family:var(--f-mono);font-size:22px;margin-top:4px}
+.tile .k{font-size:13px;color:var(--muted)}
+.orders{display:flex;flex-direction:column;gap:12px}
+.ord{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px}
+.ord .meta{font-size:14px;color:var(--muted)}
+.ord .acts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ord .acts select{width:auto}
+.pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;align-self:start}
+.s-attente{background:var(--warn-soft);color:var(--warn)}
+.s-payee{background:var(--accent-soft);color:var(--accent)}
+.s-prep,.s-exp{background:var(--sunk);color:var(--fg)}
+.s-liv{background:var(--ok-soft);color:var(--ok)}
+.s-ann,.s-expi{background:var(--bad-soft);color:var(--bad)}
+.cat-row{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.cat-row .ph{padding-top:100%;border-radius:8px}
+.vars{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.var{display:flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:999px;padding:2px 4px 2px 10px;font-size:13px}
+.var button{width:24px;height:24px;border-radius:50%;border:0;background:var(--sunk)}
+.hidden-tag{font-size:12px;color:var(--muted)}
+.newform{display:flex;flex-direction:column;gap:14px;max-width:560px}
+.upload{border:1px dashed var(--line);border-radius:var(--r);padding:16px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.upload .f{flex:1 1 auto;min-width:0}
+input[type=file]{max-width:100%;font-size:14px}
+.upload .ph{width:80px;padding-top:100px;flex:none}
+
+/* Fenêtres, toasts */
+.sheet{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.sheet pre{white-space:pre-wrap;background:var(--sunk);border-radius:8px;padding:12px;font-family:var(--f-mono);font-size:13px;margin:0}
+.toast{background:var(--fg);color:var(--bg);padding:10px 14px;border-radius:8px;margin-bottom:16px;font-size:14px}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 20px;padding-top:20px;padding-bottom:20px}
+@media (prefers-reduced-motion: no-preference){.card .ph{transition:transform .25s ease}.card:hover .ph{transform:scale(1.02)}}
+</style>
+
+</head>
+<body>
+<div class="demo"><div class="wrap">
+  <span>Maquette de validation · données d'exemple · paiement simulé</span>
+  <div class="seg" role="group" aria-label="Changer de vue">
+    <button id="mode-client" data-act="mode" data-v="client">Vue cliente</button>
+    <button id="mode-admin" data-act="mode" data-v="admin">Vue propriétaire<span id="admin-dot"></span></button>
+  </div>
+</div></div>
+
+<header class="shop" id="shop-head"><div class="wrap">
+  <button class="brand" data-act="home"><b>Nom de la boutique</b><small>Mode · Lingerie · Accessoires</small></button>
+  <button class="cartbtn" data-act="cartOpen" id="cart-btn">Panier <span class="n" id="cart-n">0</span></button>
+</div></header>
+
+<main><div class="wrap"><div id="toast" class="toast" role="status" hidden></div><div id="app"></div></div></main>
+
+<footer id="foot"><div class="wrap">
+  <span>Livraison dans toute la Côte d'Ivoire</span>
+  <button class="link" data-act="cgv">Conditions de vente</button>
+  <button class="link" data-act="livinfo">Livraison et tarifs</button>
+  <span>Contact WhatsApp : +225 07 00 00 00 00 (exemple)</span>
+</div></footer>
+
+
+<script>
+window.addEventListener('error',function(ev){try{var t=document.getElementById('toast');if(t){t.hidden=false;t.textContent='Erreur technique : '+(ev.message||'inconnue')+' (ligne '+(ev.lineno||'?')+'). Faites une capture d\u2019écran et envoyez-la.'}}catch(_){}});
+(function(){
+const ICON = {
+  dress:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M25 6v8M39 6v8M24 14h16l-2 12 10 32H16l10-32z"/><path d="M26 26h12"/></svg>',
+  top:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M22 8l-12 8 5 9 6-3v32h22V22l6 3 5-9-12-8c-2 5-6 7-10 7s-8-2-10-7z"/></svg>',
+  bra:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M18 14v12M46 14v12"/><path d="M8 34c2-6 8-9 14-9 5 0 8 3 10 7 2-4 5-7 10-7 6 0 12 3 14 9"/><path d="M8 34c2 8 9 12 15 12 5 0 8-3 9-7 1 4 4 7 9 7 6 0 13-4 15-12"/></svg>',
+  slip:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M26 6v10M38 6v10M24 16h16l3 14-3 28H24l-3-28z"/><path d="M21 30c6 3 16 3 22 0"/></svg>',
+  bag:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M22 24c0-8 4-12 10-12s10 4 10 12"/><rect x="12" y="24" width="40" height="28" rx="4"/><path d="M12 34h40"/></svg>',
+  ear:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><circle cx="20" cy="14" r="3"/><circle cx="44" cy="14" r="3"/><path d="M20 17v6M44 17v6"/><circle cx="20" cy="36" r="12"/><circle cx="44" cy="36" r="12"/></svg>',
+  scarf:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M14 12h36l-6 14 6 26H40l-8-20-8 20H14l6-26z"/></svg>'
+};
+const ZONES = [
+  ['Cocody','Abidjan',1500,'24h'],['Plateau','Abidjan',1500,'24h'],['Marcory','Abidjan',1500,'24h'],['Treichville','Abidjan',1500,'24h'],
+  ['Yopougon','Abidjan',2000,'24h'],['Abobo','Abidjan',2000,'24h'],['Port-Bouët','Abidjan',2000,'24h'],['Bingerville','Abidjan',2500,'24h'],
+  ['Bouaké','Intérieur du pays',3000,'48 à 72h'],['Yamoussoukro','Intérieur du pays',3000,'48 à 72h'],['San-Pédro','Intérieur du pays',3500,'48 à 72h'],
+  ['Korhogo','Intérieur du pays',3500,'48 à 72h'],['Daloa','Intérieur du pays',3000,'48 à 72h']
+].map((z,i)=>({id:i,name:z[0],group:z[1],fee:z[2],delay:z[3]}));
+const CATS = {vet:'Vêtements', lin:'Lingerie', acc:'Accessoires'};
+let nextId = 1;
+const P = (cat,name,price,unique,icon,c1,c2,desc,variants,extra) => Object.assign({id:nextId++,cat,name,price,unique,icon,c1,c2,desc,variants:variants.map(v=>({size:v[0],stock:v[1]})),hidden:false,isNew:true},extra||{});
+const products = [
+  P('vet','Robe portefeuille en wax',25000,true,'dress','#C2591F','#2E3C8C','Wax hollandais, coupe portefeuille, longueur genou. Une seule pièce dans cet arrivage.',[['M',1]]),
+  P('lin','Ensemble dentelle noir',18000,false,'bra','#2A2230','#6B5170','Soutien-gorge et culotte assortis, dentelle française, armatures souples.',[['S',0],['M',2],['L',1]]),
+  P('lin','Body satin champagne',15000,false,'slip','#C9A47A','#7D5B45','Satin léger, dos échancré, fermeture pressions.',[['S',1],['M',1]]),
+  P('vet','Kimono imprimé long',22000,true,'top','#3F6E5A','#C7A24B','Kimono long ouvert, manches larges, imprimé feuillage.',[['TU',0]]),
+  P('vet','Robe moulante rouge',20000,false,'dress','#A3122C','#5A0A19','Maille côtelée extensible, longueur mi-cuisse.',[['S',3],['M',4],['L',2]]),
+  P('lin','Nuisette soie bordeaux',16000,true,'slip','#6E1830','#B24E6B','Soie mélangée, bretelles réglables, bordure dentelle.',[['M',1]]),
+  P('acc','Pochette perlée dorée',12000,false,'bag','#B98B2F','#5C4416','Perles cousues main, chaînette amovible.',[['TU',3]]),
+  P('acc','Créoles dorées',6500,false,'ear','#D2A84E','#7F5A1E','Acier doré, diamètre 4 cm, hypoallergénique.',[['TU',5]]),
+  P('vet','Ensemble crop-top en pagne',24000,true,'top','#1F5C8C','#E08A2C','Crop-top et jupe crayon assortis, pagne tissé.',[['S',1]]),
+  P('lin','Soutien-gorge push-up nude',9000,false,'bra','#C99A84','#86604F','Coques moulées, bretelles amovibles.',[['85B',2],['90C',0],['95C',1]]),
+  P('acc','Foulard satiné imprimé',7000,false,'scarf','#4B2A6E','#C25B8E','Satin 90 × 90 cm, à nouer en turban ou au cou.',[['TU',4]])
+];
+const S = {mode:'client',view:'home',cat:'all',onlyAvail:false,sort:'new',pid:null,size:null,cart:[],orders:[],payOrder:null,method:'Orange Money',payErr:'',adminTab:'dash',form:{},err:'',newSeen:0,newImg:null,cartOpen:false,modal:null,ageOk:false};
+const FMT = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ') + ' FCFA';
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const byId = id => products.find(p=>p.id===id);
+const total = p => p.variants.reduce((a,v)=>a+v.stock,0);
+const reservedFor = p => S.orders.filter(o=>o.status==='attente').reduce((a,o)=>a+o.items.filter(i=>i.pid===p.id).reduce((b,i)=>b+i.qty,0),0);
+function avail(p){
+  const t = total(p);
+  if(t===0 && reservedFor(p)>0) return {cls:'b-res',label:'Réservée'};
+  if(t===0) return {cls:'b-sold',label:'Vendu'};
+  if(p.unique) return {cls:'b-unique',label:'Pièce unique'};
+  if(t<=3) return {cls:'b-few',label:'Plus que '+t};
+  return {cls:'b-ok',label:'Disponible'};
+}
+const STAT = {attente:'En attente de paiement',payee:'Payée',prep:'En préparation',exp:'Expédiée',liv:'Livrée',ann:'Annulée',expi:'Expirée'};
+const NEXT = {payee:['prep','exp','liv'],prep:['exp','liv'],exp:['liv']};
+const ph = (p,extra) => `<div class="ph" style="--c1:${p.c1};--c2:${p.c2}" ${extra||''}>${p.img?`<img src="${p.img}" alt="">`:ICON[p.icon]||ICON.top}</div>`;
+let refN = 4821;
+const newRef = () => 'CMD-20261025-' + (refN++);
+
+// Commandes d'exemple pour l'espace propriétaire
+(function seed(){
+  const now = Date.now();
+  S.orders.push({ref:newRef(),status:'payee',created:now-50*60e3,name:'Awa K. (exemple)',phone:'07 11 22 33 44',email:'',zone:0,address:'Riviera 3, rue des Jardins',landmark:'Face pharmacie des Rosiers',notes:'',items:[{pid:7,name:'Pochette perlée dorée',size:'TU',qty:1,price:12000}],fee:1500,method:'Wave'});
+  S.orders.push({ref:newRef(),status:'exp',created:now-26*3600e3,name:'Mariam T. (exemple)',phone:'05 44 55 66 77',email:'',zone:8,address:'Quartier Commerce',landmark:'Derrière la gare routière',notes:'Appeler avant',items:[{pid:4,name:'Kimono imprimé long',size:'TU',qty:1,price:22000}],fee:3000,method:'Orange Money'});
+  S.orders.forEach(o=>{o.subtotal=o.items.reduce((a,i)=>a+i.price*i.qty,0);o.total=o.subtotal+o.fee});
+})();
+
+const $ = s => document.querySelector(s);
+function top(){try{document.querySelector('main').scrollIntoView({block:'start'})}catch(e){try{window.scrollTo(0,0)}catch(_){}}}
+const app = $('#app');
+let toastT;
+function toast(msg){const t=$('#toast');t.textContent=msg;t.hidden=false;try{t.scrollIntoView({block:'nearest'})}catch(e){}clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,4500)}
+
+/* ---------- Vues cliente ---------- */
+function vHome(){
+  let list = products.filter(p=>!p.hidden && (S.cat==='all'||p.cat===S.cat) && (!S.onlyAvail || total(p)>0));
+  if(S.sort==='asc') list=[...list].sort((a,b)=>a.price-b.price);
+  if(S.sort==='desc') list=[...list].sort((a,b)=>b.price-a.price);
+  if(S.sort==='new') list=[...list].sort((a,b)=>b.id-a.id);
+  const chips = [['all','Tout'],['vet','Vêtements'],['lin','Lingerie'],['acc','Accessoires']].map(([k,l])=>`<button class="chip" data-act="cat" data-v="${k}" aria-pressed="${S.cat===k}">${l}</button>`).join('');
+  return `
+  <section class="arrival">
+    <div><div class="eyebrow">Nouvel arrivage · 25 octobre 2026</div>
+      <h1>L'arrivage <em>d'octobre</em> est en ligne</h1>
+      <p>${products.filter(p=>!p.hidden).length} articles, dont ${products.filter(p=>p.unique&&!p.hidden).length} pièces uniques. Une fois vendue, une pièce unique ne revient pas.</p></div>
+  </section>
+  <div class="tools">${chips}<span class="sp"></span>
+    <label><input type="checkbox" id="only-avail" ${S.onlyAvail?'checked':''}> Disponibles seulement</label>
+    <select id="sort" aria-label="Trier"><option value="new" ${S.sort==='new'?'selected':''}>Nouveautés</option><option value="asc" ${S.sort==='asc'?'selected':''}>Prix croissant</option><option value="desc" ${S.sort==='desc'?'selected':''}>Prix décroissant</option></select>
+  </div>
+  ${list.length?`<div class="grid">${list.map(p=>{const a=avail(p);return `<button class="card ${total(p)===0?'out':''}" data-act="open" data-id="${p.id}">${ph(p)}<span class="badge ${a.cls}">${a.label}</span><span class="nm">${esc(p.name)}</span><span class="pr">${FMT(p.price)}</span></button>`}).join('')}</div>`:`<p class="empty">Aucun article dans cette sélection.</p>`}`;
+}
+function vProduct(){
+  const p = byId(S.pid); if(!p) return vHome();
+  const a = avail(p);
+  const single = p.variants.length===1;
+  if(single && !S.size && p.variants[0].stock>0) S.size = p.variants[0].size;
+  const sel = p.variants.find(v=>v.size===S.size);
+  const inCart = S.cart.filter(c=>c.pid===p.id && c.size===S.size).reduce((x,c)=>x+c.qty,0);
+  const canAdd = sel && sel.stock>inCart;
+  return `
+  <button class="link" data-act="home">← Retour à l'arrivage</button>
+  <div class="pd" style="margin-top:16px">
+    ${ph(p)}
+    <div class="stack">
+      <div><span class="badge ${a.cls}">${a.label}</span><h1>${esc(p.name)}</h1><div class="price">${FMT(p.price)}</div></div>
+      <p class="desc">${esc(p.desc)}</p>
+      <div><div class="eyebrow">${single&&p.variants[0].size==='TU'?'Taille unique':'Choisir la taille'}</div>
+        <div class="sizes">${p.variants.map(v=>`<button class="size" data-act="size" data-v="${esc(v.size)}" aria-pressed="${S.size===v.size}" ${v.stock===0?'disabled':''}>${esc(v.size)}<small>${v.stock===0?'épuisé':v.stock===1?'1 restante':v.stock+' restantes'}</small></button>`).join('')}</div>
+      </div>
+      <button class="btn" data-act="add" ${canAdd?'':'disabled'}>${total(p)===0?(a.label==='Réservée'?'Réservée par une autre cliente':'Vendu'):!sel?'Choisissez une taille':canAdd?'Ajouter au panier':'Déjà au panier'}</button>
+      <p class="note">Paiement par Orange Money, MTN, Wave ou Djamo. Livraison en 24 h à Abidjan, 48 à 72 h à l'intérieur. Aucun retour possible.</p>
+      ${total(p)>0?`<div class="demo-note">Démo : <button class="link" data-act="rival">simuler une autre cliente qui achète ${p.unique?'cette pièce':'tout le stock'}</button> pour voir le badge passer à « Vendu ».</div>`:''}
+    </div>
+  </div>`;
+}
+function cartLines(){return S.cart.map((c,i)=>{const p=byId(c.pid);return {...c,i,p}}).filter(c=>c.p)}
+function sub(){return cartLines().reduce((a,c)=>a+c.p.price*c.qty,0)}
+function vCheckout(){
+  const lines = cartLines();
+  if(!lines.length) return `<p class="empty">Votre panier est vide. <button class="link" data-act="home">Voir l'arrivage</button></p>`;
+  const f = S.form; const z = ZONES.find(z=>String(z.id)===String(f['f-zone']));
+  const fee = z?z.fee:0;
+  const opts = g => ZONES.filter(z=>z.group===g).map(z=>`<option value="${z.id}" ${String(f['f-zone'])===String(z.id)?'selected':''}>${z.name} · ${FMT(z.fee)} · ${z.delay}</option>`).join('');
+  return `
+  <button class="link" data-act="home">← Continuer mes achats</button>
+  <div class="co" style="margin-top:16px">
+    <form id="co-form" class="stack" novalidate>
+      <div><h1>Livraison</h1><p class="note" style="margin:0">Pas besoin de compte. Le livreur vous appellera au numéro indiqué.</p></div>
+      ${S.err?`<div class="err" role="alert">${S.err}</div>`:''}
+      <div class="two">
+        <div class="f"><label for="f-name">Nom et prénom</label><input type="text" id="f-name" value="${esc(f['f-name'])}" autocomplete="name"></div>
+        <div class="f"><label for="f-phone">Téléphone</label><input type="tel" id="f-phone" value="${esc(f['f-phone'])}" placeholder="07 00 00 00 00" autocomplete="tel"></div>
+      </div>
+      <div class="f"><label for="f-email">E-mail <span class="hint">(facultatif, pour recevoir la confirmation)</span></label><input type="email" id="f-email" value="${esc(f['f-email'])}"></div>
+      <div class="f"><label for="f-zone">Commune ou ville</label><select id="f-zone"><option value="">Choisir…</option><optgroup label="Abidjan">${opts('Abidjan')}</optgroup><optgroup label="Intérieur du pays">${opts('Intérieur du pays')}</optgroup></select></div>
+      <div class="f"><label for="f-address">Quartier et rue</label><input type="text" id="f-address" value="${esc(f['f-address'])}" placeholder="Ex. Riviera 3, rue des Jardins"></div>
+      <div class="f"><label for="f-landmark">Point de repère</label><input type="text" id="f-landmark" value="${esc(f['f-landmark'])}" placeholder="Ex. face à la pharmacie, portail bleu"><span class="hint">Aide le livreur à vous trouver du premier coup.</span></div>
+      <div class="f"><label for="f-notes">Instructions <span class="hint">(facultatif)</span></label><textarea id="f-notes" rows="2">${esc(f['f-notes'])}</textarea></div>
+      <label class="check"><input type="checkbox" id="f-accept" ${f['f-accept']?'checked':''}><span>J'accepte les <button type="button" class="link" data-act="cgv">conditions de vente</button> : <b>aucun retour ni échange possible</b>.</span></label>
+      <button class="btn" type="submit">Valider et payer ${FMT(sub()+fee)}</button>
+      <p class="note" style="margin:0">En validant, vos articles vous sont réservés pendant 15 minutes, le temps du paiement.</p>
+    </form>
+    <aside class="panel stack">
+      <div class="eyebrow">Récapitulatif</div>
+      ${lines.map(c=>`<div class="line">${ph(c.p)}<div><div>${esc(c.p.name)}</div><div class="note">Taille ${esc(c.size)} · ×${c.qty}</div></div><div class="mono">${FMT(c.p.price*c.qty)}</div></div>`).join('')}
+      <div class="tot">
+        <div class="row"><span>Sous-total</span><span class="mono">${FMT(sub())}</span></div>
+        <div class="row"><span>Livraison${z?' · '+z.name:''}</span><span class="mono">${z?FMT(fee):'à choisir'}</span></div>
+        <div class="row" style="font-weight:600"><span>Total</span><span class="mono">${FMT(sub()+fee)}</span></div>
+      </div>
+    </aside>
+  </div>`;
+}
+function remain(o){return Math.max(0,o.expires-Date.now())}
+function mmss(ms){const s=Math.ceil(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function vPay(){
+  const o = S.orders.find(o=>o.ref===S.payOrder);
+  if(!o || o.status!=='attente') return vHome();
+  const m = ['Orange Money','MTN Mobile Money','Wave','Djamo'];
+  return `
+  <div class="pay stack">
+    <div><div class="eyebrow">Commande <span class="mono">${o.ref}</span></div><h1 style="font-size:32px">Paiement Mobile Money</h1></div>
+    <div class="panel stack">
+      <div class="note" style="text-align:center">Vos articles sont réservés encore</div>
+      <div class="timer" id="timer">${mmss(remain(o))}</div>
+      <div class="row"><span>Montant à payer</span><span class="mono" style="font-weight:600">${FMT(o.total)}</span></div>
+    </div>
+    <div class="eyebrow">Moyen de paiement</div>
+    <div class="methods">${m.map(x=>`<button class="method" data-act="method" data-v="${x}" aria-pressed="${S.method===x}">${x}</button>`).join('')}</div>
+    ${S.payErr?`<div class="err" role="alert">${S.payErr}</div>`:''}
+    <div class="sim">Écran simulé. En production, la cliente est envoyée vers la page de paiement Jèko, valide sur son téléphone, puis revient ici. La commande n'est confirmée qu'à la réception de la notification signée de Jèko.</div>
+    <button class="btn" data-act="payOk">Simuler : paiement réussi</button>
+    <div class="row" style="flex-wrap:wrap"><button class="btn ghost small" data-act="payFail">Simuler : paiement refusé</button><button class="btn ghost small" data-act="expire">Faire expirer la réservation</button></div>
+  </div>`;
+}
+function vDone(){
+  const o = S.orders.find(o=>o.ref===S.payOrder);
+  return `<div class="pay stack" style="text-align:center">
+    <div class="eyebrow">Paiement confirmé</div>
+    <h1 style="font-size:34px">Merci, votre commande est enregistrée</h1>
+    <p>Référence <span class="mono" style="font-weight:600">${o?o.ref:''}</span><br>Total payé : <span class="mono">${o?FMT(o.total):''}</span> par ${o?esc(o.method):''}</p>
+    <p class="note">La boutique prépare votre colis. Le livreur vous appellera au ${o?esc(o.phone):''} avant de passer.</p>
+    <div><button class="btn" data-act="home">Retour à la boutique</button></div>
+    <div class="demo-note">Passez en « Vue propriétaire » : la commande apparaît dans la liste, prête à préparer.</div>
+  </div>`;
+}
+
+/* ---------- Vue propriétaire ---------- */
+function vAdmin(){
+  const tabs=[['dash','Tableau de bord'],['orders','Commandes'],['cat','Catalogue'],['new','Ajouter un article']];
+  const body = S.adminTab==='orders'?aOrders():S.adminTab==='cat'?aCat():S.adminTab==='new'?aNew():aDash();
+  return `<div class="eyebrow">Espace propriétaire</div><h1 style="font-size:32px;margin:4px 0 16px">Bonjour, voici votre boutique</h1>
+  <nav class="tabs">${tabs.map(([k,l])=>`<button data-act="atab" data-v="${k}" aria-pressed="${S.adminTab===k}">${l}</button>`).join('')}</nav>${body}`;
+}
+function ordCard(o){
+  const z = ZONES[o.zone];
+  const nexts = NEXT[o.status]||[];
+  return `<div class="ord">
+    <div><div class="mono" style="font-weight:500">${o.ref}</div>
+      <div>${esc(o.name)} · ${esc(o.phone)}</div>
+      <div class="meta">${z.name} · ${o.items.map(i=>esc(i.name)+' ('+esc(i.size)+')'+(i.qty>1?' ×'+i.qty:'')).join(', ')}</div>
+      <div class="meta mono">${FMT(o.total)}${o.method?' · '+esc(o.method):''}</div></div>
+    <span class="pill s-${o.status}">${STAT[o.status]}</span>
+    <div class="acts">
+      ${o.status==='attente'?`<span class="meta">Réservée encore <span class="mono" data-left="${o.ref}">${mmss(remain(o))}</span></span>`:''}
+      ${nexts.length?`<label class="meta" for="st-${o.ref}">Passer à</label><select id="st-${o.ref}" data-ref="${o.ref}" class="st-sel"><option value="">—</option>${nexts.map(n=>`<option value="${n}">${STAT[n]}</option>`).join('')}</select>`:''}
+      ${['payee','prep','exp'].includes(o.status)?`<button class="btn ghost small" data-act="bon" data-ref="${o.ref}">Bon de livraison</button>`:''}
+      ${['payee','prep'].includes(o.status)?`<button class="btn ghost small" data-act="cancel" data-ref="${o.ref}">Annuler et remettre en stock</button>`:''}
+    </div></div>`;
+}
+function aDash(){
+  const paid = S.orders.filter(o=>['payee','prep','exp','liv'].includes(o.status));
+  const today = paid.filter(o=>Date.now()-o.created<24*3600e3).reduce((a,o)=>a+o.subtotal,0);
+  const toPrep = S.orders.filter(o=>o.status==='payee'||o.status==='prep').length;
+  const pending = S.orders.filter(o=>o.status==='attente').length;
+  const low = products.filter(p=>!p.hidden && !p.unique && total(p)>0 && total(p)<=2);
+  return `<div class="tiles">
+    <div class="tile"><div class="k">Ventes des dernières 24 h</div><div class="v">${FMT(today)}</div></div>
+    <div class="tile"><div class="k">Commandes à préparer</div><div class="v">${toPrep}</div></div>
+    <div class="tile"><div class="k">Paiements en cours</div><div class="v">${pending}</div></div>
+    <div class="tile"><div class="k">Pièces uniques encore en vente</div><div class="v">${products.filter(p=>p.unique&&!p.hidden&&total(p)>0).length}</div></div>
+  </div>
+  <div class="stack">
+    <h2 style="font-size:22px">À préparer</h2>
+    <div class="orders">${S.orders.filter(o=>['payee','prep','attente'].includes(o.status)).slice().reverse().map(ordCard).join('')||'<p class="note">Aucune commande à préparer.</p>'}</div>
+    <h2 style="font-size:22px;margin-top:12px">Bientôt épuisés</h2>
+    ${low.length?low.map(p=>`<div class="row"><span>${esc(p.name)}</span><span class="badge b-few">${total(p)} restante${total(p)>1?'s':''}</span></div>`).join(''):'<p class="note">Rien à signaler.</p>'}
+  </div>`;
+}
+function aOrders(){return `<div class="orders">${S.orders.slice().reverse().map(ordCard).join('')}</div>`}
+function aCat(){
+  return `<p class="note" style="margin-top:0">Ajustez le stock après une vente en boutique ou une erreur de comptage. Le site se met à jour tout de suite.</p>
+  ${products.map(p=>{const a=avail(p);return `<div class="cat-row">${ph(p)}<div style="min-width:0"><div>${esc(p.name)} <span class="badge ${a.cls}">${a.label}</span> ${p.hidden?'<span class="hidden-tag">· masqué</span>':''}</div>
+    <div class="note mono">${FMT(p.price)} · ${CATS[p.cat]}</div>
+    <div class="vars">${p.variants.map((v,i)=>`<span class="var">${esc(v.size)} <b class="mono">${v.stock}</b><button data-act="stk" data-id="${p.id}" data-i="${i}" data-d="-1" aria-label="Retirer une pièce ${esc(v.size)}">−</button><button data-act="stk" data-id="${p.id}" data-i="${i}" data-d="1" aria-label="Ajouter une pièce ${esc(v.size)}">+</button></span>`).join('')}</div></div>
+    <button class="btn ghost small" data-act="hide" data-id="${p.id}">${p.hidden?'Afficher':'Masquer'}</button></div>`}).join('')}`;
+}
+function aNew(){
+  return `<form id="new-form" class="newform" novalidate>
+    <p class="note" style="margin:0">Depuis le téléphone : prenez la photo, remplissez quatre champs, publiez. L'article apparaît en tête de l'arrivage.</p>
+    <div class="upload"><div class="ph" id="new-ph" style="--c1:#8E2453;--c2:#2A2230">${S.newImg?`<img src="${S.newImg}" alt="">`:ICON.dress}</div>
+      <div class="f"><label for="n-photo">Photo</label><input type="file" id="n-photo" accept="image/*"><span class="hint">Sur téléphone, l'appareil photo s'ouvre directement.</span></div></div>
+    <div class="f"><label for="n-name">Nom de l'article</label><input type="text" id="n-name" placeholder="Ex. Robe longue en bazin"></div>
+    <div class="two">
+      <div class="f"><label for="n-cat">Catégorie</label><select id="n-cat"><option value="vet">Vêtements</option><option value="lin">Lingerie</option><option value="acc">Accessoires</option></select></div>
+      <div class="f"><label for="n-price">Prix (FCFA)</label><input type="number" id="n-price" min="0" step="500" placeholder="18000" inputmode="numeric"></div>
+    </div>
+    <label class="check"><input type="checkbox" id="n-unique"><span><b>Pièce unique</b> : un seul exemplaire, une seule taille.</span></label>
+    <div class="f"><label for="n-sizes">Tailles et quantités</label><input type="text" id="n-sizes" placeholder="S=1, M=2, L=1   (ou TU=3 pour une taille unique)"><span class="hint">Pour une pièce unique, indiquez seulement la taille : M</span></div>
+    <div class="f"><label for="n-desc">Description <span class="hint">(facultatif)</span></label><textarea id="n-desc" rows="2"></textarea></div>
+    <div id="n-err"></div>
+    <button class="btn" type="submit">Publier l'article</button>
+  </form>`;
+}
+
+/* ---------- Rendu ---------- */
+function render(){
+  const admin = S.mode==='admin';
+  $('#mode-client').setAttribute('aria-pressed',!admin);
+  $('#mode-admin').setAttribute('aria-pressed',admin);
+  $('#shop-head').hidden = admin; $('#foot').hidden = admin;
+  const newCount = S.orders.filter(o=>o.status==='payee').length - S.newSeen;
+  $('#admin-dot').innerHTML = (!admin && newCount>0)?`<span class="admin-dot">${newCount}</span>`:'';
+  $('#cart-n').textContent = S.cart.reduce((a,c)=>a+c.qty,0);
+  $('#cart-btn').hidden = !S.ageOk;
+  app.innerHTML = !S.ageOk?vAge():(S.modal&&S.modal.kind)?vSheet():admin?vAdmin():S.cartOpen?vCart():S.view==='product'?vProduct():S.view==='checkout'?vCheckout():S.view==='pay'?vPay():S.view==='done'?vDone():vHome();
+}
+function vAge(){
+  return `<section class="sheet" style="padding-top:24px">
+    <div class="eyebrow">Accès à la boutique</div><h1 style="font-size:30px">Avez-vous 18 ans ou plus ?</h1>
+    <p class="note" style="margin:0">Cette boutique présente de la lingerie et des articles réservés aux adultes.</p>
+    ${S.modal==='minor'?'<div class="err">Désolé, ce site est réservé aux personnes majeures.</div>':''}
+    <button class="btn" data-act="ageYes">Oui, j'ai 18 ans ou plus</button>
+    <button class="btn ghost" data-act="ageNo">Non</button></section>`;
+}
+function vSheet(){
+  const m=S.modal;
+  return `<section class="sheet"><button class="link" data-act="closeModal" style="align-self:flex-start">← Retour</button>
+    <h1 style="font-size:28px">${m.title}</h1>${m.body}<div class="row" style="flex-wrap:wrap;justify-content:flex-start">${m.extra||''}<button class="btn small" data-act="closeModal">Fermer</button></div></section>`;
+}
+function vCart(){
+  const lines = cartLines();
+  return `<section class="cartview sheet">
+    <header><h1 style="font-size:30px">Panier</h1><button class="btn ghost small" data-act="cartClose">Continuer mes achats</button></header>
+    ${S.cartWarn?`<div class="warnbox">${S.cartWarn}</div>`:''}
+    <div class="lines">${lines.length?lines.map(c=>{const v=c.p.variants.find(v=>v.size===c.size);return `<div class="line">${ph(c.p)}<div style="min-width:0"><div>${esc(c.p.name)}</div><div class="note">Taille ${esc(c.size)} · <span class="mono">${FMT(c.p.price)}</span></div>
+      <div class="qty"><button data-act="q" data-i="${c.i}" data-d="-1" aria-label="Retirer un">−</button><span class="mono">${c.qty}</span><button data-act="q" data-i="${c.i}" data-d="1" aria-label="Ajouter un" ${v&&c.qty>=v.stock?'disabled':''}>+</button></div></div>
+      <button class="link" data-act="rm" data-i="${c.i}">Retirer</button></div>`}).join(''):'<p class="note">Votre panier est vide.</p>'}</div>
+    ${lines.length?`<div class="tot"><div class="row"><span>Sous-total</span><span class="mono">${FMT(sub())}</span></div><p class="note" style="margin:0">Frais de livraison calculés à l'étape suivante.</p><button class="btn" data-act="checkout">Commander</button></div>`:''}
+  </section>`;
+}
+/* Le panier revérifie le stock à son ouverture */
+function checkCart(){
+  const gone=[];
+  S.cart = S.cart.filter(c=>{const p=byId(c.pid);const v=p&&p.variants.find(v=>v.size===c.size);
+    if(!v||v.stock===0){gone.push(p?p.name:'Un article');return false}
+    if(c.qty>v.stock){c.qty=v.stock}
+    return true});
+  S.cartWarn = gone.length?`${gone.join(', ')} vient d'être vendu et a été retiré de votre panier.`:'';
+}
+
+/* ---------- Actions ---------- */
+const A = {
+  mode(d){S.mode=d.v; if(d.v==='admin'){S.newSeen=S.orders.filter(o=>o.status==='payee').length} S.cartOpen=false; render(); top()},
+  home(){S.view='home';S.err='';S.cartOpen=false;S.modal=null;render();top()},
+  cat(d){S.cat=d.v;render()},
+  open(d){S.cartOpen=false;S.view='product';S.pid=+d.id;S.size=null;render();top()},
+  size(d){S.size=d.v;render()},
+  add(){const p=byId(S.pid);const ex=S.cart.find(c=>c.pid===p.id&&c.size===S.size);if(ex)ex.qty++;else S.cart.push({pid:p.id,size:S.size,qty:1});S.cartWarn='';S.cartOpen=true;render();top()},
+  cartOpen(){checkCart();S.cartOpen=true;render();top()},
+  cartClose(){S.cartOpen=false;render();top()},
+  q(d){const c=S.cart[+d.i];c.qty+=+d.d;if(c.qty<=0)S.cart.splice(+d.i,1);render()},
+  rm(d){S.cart.splice(+d.i,1);render()},
+  checkout(){checkCart(); if(S.cartWarn){render();return} S.cartOpen=false;S.view='checkout';S.err='';render();top()},
+  rival(){const p=byId(S.pid);const items=p.variants.filter(v=>v.stock>0).map(v=>({pid:p.id,name:p.name,size:v.size,qty:v.stock,price:p.price}));
+    p.variants.forEach(v=>v.stock=0);
+    const o={ref:newRef(),status:'payee',created:Date.now(),name:'Autre cliente (démo)',phone:'01 23 45 67 89',email:'',zone:4,address:'Yopougon Maroc',landmark:'Près du marché',notes:'',items,fee:2000,method:'MTN Mobile Money'};
+    o.subtotal=items.reduce((a,i)=>a+i.price*i.qty,0);o.total=o.subtotal+o.fee;S.orders.push(o);
+    toast('Une autre cliente vient de payer : le stock passe à zéro.');render()},
+  method(d){S.method=d.v;S.payErr='';render()},
+  payOk(){const o=S.orders.find(o=>o.ref===S.payOrder);if(!o||o.status!=='attente')return;o.status='payee';o.method=S.method;S.cart=[];S.form={};S.payErr='';S.view='done';
+    toast('Paiement confirmé. La propriétaire a reçu une alerte.');render();top()},
+  payFail(){S.payErr='Le paiement a été refusé (solde insuffisant ou code incorrect). Vos articles restent réservés : vous pouvez réessayer ou choisir un autre moyen.';render()},
+  expire(){const o=S.orders.find(o=>o.ref===S.payOrder);if(o)o.expires=Date.now()-1;tick()},
+  ageYes(){S.ageOk=true;S.modal=null;render();top()},
+  ageNo(){S.modal='minor';render()},
+  closeModal(){S.modal=null;render();top()},
+  cgv(){S.modal={kind:1,title:'Conditions de vente',body:`<p style="margin:0">Les articles sont vendus en l'état décrit et photographié. <b>Aucun retour ni échange n'est possible</b>, en particulier pour la lingerie, pour des raisons d'hygiène.</p><p class="note" style="margin:0">Le paiement se fait en ligne par Mobile Money. La commande est confirmée dès réception du paiement. Les articles sont réservés 15 minutes pendant le paiement.</p>`};render();top()},
+  livinfo(){S.modal={kind:1,title:'Livraison et tarifs',body:`<div class="stack" style="gap:6px">${ZONES.map(z=>`<div class="row"><span>${z.name}</span><span class="mono">${FMT(z.fee)} · ${z.delay}</span></div>`).join('')}</div><p class="note" style="margin:0">Tarifs d'exemple, à remplacer par ceux du livreur.</p>`};render();top()},
+  atab(d){S.adminTab=d.v;render()},
+  bon(d){const o=S.orders.find(o=>o.ref===d.ref);const z=ZONES[o.zone];
+    const txt=`Commande ${o.ref}\nCliente : ${o.name}\nTél : ${o.phone}\nZone : ${z.name} (${z.group})\nAdresse : ${o.address}\nRepère : ${o.landmark||'-'}\n${o.notes?'Instructions : '+o.notes+'\n':''}Articles : ${o.items.map(i=>i.name+' ('+i.size+')'+(i.qty>1?' x'+i.qty:'')).join(', ')}\nDéjà payé : ${FMT(o.total)} (rien à encaisser)`;
+    S.modal={kind:1,title:'Bon de livraison',body:`<pre id="bon-txt">${esc(txt)}</pre><p class="note" style="margin:0">Le nom des articles peut être retiré du bon pour plus de discrétion.</p>`,
+      extra:`<a class="btn ghost small" style="text-decoration:none" href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">Envoyer sur WhatsApp</a><button class="btn ghost small" data-act="copyBon">Copier</button>`};render();top()},
+  copyBon(){const t=$('#bon-txt').textContent;
+    const sel=()=>{const r=document.createRange();r.selectNodeContents($('#bon-txt'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Texte sélectionné : copiez-le avec le menu du téléphone.')};
+    try{navigator.clipboard.writeText(t).then(()=>toast('Bon de livraison copié.'),sel)}catch(e){sel()}},
+  cancel(d){const o=S.orders.find(o=>o.ref===d.ref);restock(o);o.status='ann';toast(`Commande ${o.ref} annulée, stock remis en ligne.`);render()},
+  stk(d){const v=byId(+d.id).variants[+d.i];v.stock=Math.max(0,v.stock+(+d.d));render()},
+  hide(d){const p=byId(+d.id);p.hidden=!p.hidden;render()}
+};
+function restock(o){o.items.forEach(i=>{const p=byId(i.pid);const v=p&&p.variants.find(v=>v.size===i.size);if(v)v.stock+=i.qty})}
+
+document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;const f=A[el.dataset.act];if(f){if(el.tagName==='A')return;e.preventDefault();f(el.dataset,e)}});
+function syncField(t){if(t&&t.id&&t.id.indexOf('f-')===0){var v=t.type==='checkbox'?t.checked:t.value;var was=S.form[t.id];S.form[t.id]=v;if(t.id==='f-zone'&&was!==v)render()}}
+document.addEventListener('input',function(e){syncField(e.target)});
+document.addEventListener('change',function(e){syncField(e.target)});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.id==='only-avail'){S.onlyAvail=t.checked;render()}
+  else if(t.id==='sort'){S.sort=t.value;render()}
+  else if(t.classList.contains('st-sel')&&t.value){const o=S.orders.find(o=>o.ref===t.dataset.ref);o.status=t.value;toast(`${o.ref} : ${STAT[t.value]}`);render()}
+  else if(t.id==='n-photo'&&t.files[0]){const r=new FileReader();r.onload=()=>{S.newImg=r.result;$('#new-ph').innerHTML=`<img src="${r.result}" alt="">`};r.readAsDataURL(t.files[0])}
+});
+document.addEventListener('submit',e=>{
+  e.preventDefault();
+  if(e.target.id==='co-form'){
+    ['f-name','f-phone','f-email','f-zone','f-address','f-landmark','f-notes','f-accept'].forEach(function(id){var el=document.getElementById(id);if(el)S.form[id]=el.type==='checkbox'?el.checked:el.value});
+    const f=S.form, miss=[];
+    if(!(f['f-name']||'').trim())miss.push('nom');
+    if(((f['f-phone']||'').replace(/\D/g,'')).length<8)miss.push('téléphone (8 chiffres minimum)');
+    if(f['f-zone']===undefined||f['f-zone']==='')miss.push('commune ou ville');
+    if(!(f['f-address']||'').trim())miss.push('quartier et rue');
+    if(miss.length){S.err='Il manque : '+miss.join(', ')+'.';render();return}
+    if(!f['f-accept']){S.err='Cochez la case des conditions de vente pour continuer.';render();return}
+    // Réservation atomique : on vérifie tout avant de toucher au stock
+    for(const c of cartLines()){const v=c.p.variants.find(v=>v.size===c.size);
+      if(!v||v.stock<c.qty){checkCart();S.view='checkout';S.err=`« ${c.p.name} » (${c.size}) vient d'être pris par une autre cliente et a été retiré du panier. Vos coordonnées sont conservées.`;render();return}}
+    const items=cartLines().map(c=>({pid:c.pid,name:c.p.name,size:c.size,qty:c.qty,price:c.p.price}));
+    items.forEach(i=>{byId(i.pid).variants.find(v=>v.size===i.size).stock-=i.qty});
+    const z=ZONES[+f['f-zone']];
+    const o={ref:newRef(),status:'attente',created:Date.now(),expires:Date.now()+15*60e3,name:f['f-name'].trim(),phone:f['f-phone'].trim(),email:f['f-email']||'',zone:z.id,address:f['f-address'].trim(),landmark:(f['f-landmark']||'').trim(),notes:(f['f-notes']||'').trim(),items,fee:z.fee,method:''};
+    o.subtotal=items.reduce((a,i)=>a+i.price*i.qty,0);o.total=o.subtotal+o.fee;
+    S.orders.push(o);S.payOrder=o.ref;S.view='pay';S.err='';S.payErr='';render();top();
+  }
+  if(e.target.id==='new-form'){
+    const g=id=>document.getElementById(id), err=g('n-err');
+    const name=g('n-name').value.trim(), price=parseInt(g('n-price').value,10), unique=g('n-unique').checked, raw=g('n-sizes').value.trim();
+    let variants=[];
+    if(unique){variants=[[raw.split(/[=,\s]/)[0]||'TU',1]]}
+    else{variants=raw.split(',').map(s=>s.split('=').map(x=>x.trim())).filter(a=>a[0]).map(([s,q])=>[s,Math.max(0,parseInt(q,10)||0)])}
+    const miss=[]; if(!name)miss.push('nom'); if(!(price>0))miss.push('prix'); if(!variants.length)miss.push('tailles et quantités');
+    if(miss.length){err.innerHTML=`<div class="err">Il manque : ${miss.join(', ')}.</div>`;return}
+    const cat=g('n-cat').value; const icon={vet:'dress',lin:'bra',acc:'bag'}[cat];
+    const p=P(cat,name,price,unique,icon,'#8E2453','#2A2230',g('n-desc').value.trim()||'Nouvel article de l\'arrivage.',variants,{img:S.newImg});
+    products.push(p); S.newImg=null; S.adminTab='cat'; toast(`« ${name} » est en ligne.`); render();
+  }
+});
+
+/* Minuterie : décompte et libération automatique des réservations expirées */
+function tick(){
+  let changed=false;
+  S.orders.forEach(o=>{if(o.status==='attente'&&remain(o)===0){restock(o);o.status='expi';changed=true;
+    if(S.payOrder===o.ref&&S.view==='pay'&&S.mode==='client'){S.view='checkout';S.err=`Le délai de 15 minutes est dépassé : la commande ${o.ref} a expiré et les articles sont de nouveau en vente. Vous pouvez valider à nouveau.`}}});
+  if(changed){render();return}
+  const t=$('#timer'); const o=S.orders.find(o=>o.ref===S.payOrder);
+  if(t&&o){const r=remain(o);t.textContent=mmss(r);t.classList.toggle('low',r<3*60e3)}
+  document.querySelectorAll('[data-left]').forEach(el=>{const x=S.orders.find(o=>o.ref===el.dataset.left);if(x)el.textContent=mmss(remain(x))});
+}
+setInterval(tick,1000);
+render();
+})();
+</script>
+
+</body>
+</html>
